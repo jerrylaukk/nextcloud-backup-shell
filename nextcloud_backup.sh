@@ -18,7 +18,7 @@ EXCLUDELIST="'/srv/nextcloud/rsync_exclude.list'"
 
 if [ ! -e $LASTBACKUPDIR ]
 # if not exist, sync all
-    
+    sudo rsync -avz --exclude-from=$EXCLUDELIST $SOURCEDIR $TODAYDIR
 else
 # if backup aleady exist, sync only for the increasment
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST --link-dest='${LASTBACKUPDIR}' $SOURCEDIR $TODAYDIR

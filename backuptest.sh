@@ -10,10 +10,10 @@
 TODAY=$(date +%Y-%m-%d)
 SOURCEDIR=/home/ubuntu/nas/data
 DESTDIR=/mnt/wdusb/backuptest
-LASTBACKUPDIR=${DESTDIR}/$(ls ${DESTDIR} | tail -n 1)
+LASTBACKUPDIR=${DESTDIR}/$(ls -t ${DESTDIR} | head -n 1)
 TODAYDIR=${DESTDIR}/nexcloud_${TODAY}
-EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 LOGFILE='/home/ubuntu/nas/backup.log'
+EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 
 echo "---------Date:"$TODAY" start---------"  >> $LOGFILE
 echo "LASTBACKUPDIR:"$LASTBACKUPDIR  >> $LOGFILE
@@ -21,13 +21,13 @@ echo "TODAYDIR:"$TODAYDIR  >> $LOGFILE
 
 if [ ! $(ls -A ${DESTDIR} | tail -n -1) ]; then
 # if not exist, sync all
-    echo "--------Backup Mode: All backup--------" >> $LOGFILE
+    echo "----------Start to sync all data-----------" >> $LOGFILE
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST $SOURCEDIR $TODAYDIR
 else
 # if backup aleady exist, sync only for the increasment
-    echo "--------Backup Mode: Delta backup--------" >> $LOGFILE
+    echo "Delta backup" >> $LOGFILE
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST --link-dest=${LASTBACKUPDIR} $SOURCEDIR $TODAYDIR
 fi
 
-echo "---------Execution done-----------" >> $LOGFILE
-echo "---------Date:"$TODAY" end ---------"  >> $LOGFILE
+echo "Execution done" >> $LOGFILE
+

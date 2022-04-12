@@ -6,7 +6,7 @@
 #       2.1. Sync all data to dest with name nexcloud_YYYY-MM-DD
 #       2.2. List dest directory with ls -t command, and get first one as the last backup name
 #       2.3. Sync nextcloud directory with --link-dest and the dir value was get from step 2.2
-
+#   test
 TODAY=$(date +%Y-%m-%d)
 SOURCEDIR=/home/ubuntu/nas/data
 DESTDIR=/mnt/wdusb/backuptest

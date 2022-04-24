@@ -10,7 +10,7 @@
 TODAY=$(date +%Y-%m-%d)
 SOURCEDIR=/www/wwwroot/nextcloud/
 DESTDIR=/mnt/wdusb/ncbackup/
-LASTBACKUPDIR=${DESTDIR}$(ls ${DESTDIR} | tail -n 1)
+LASTBACKUPDIR=${DESTDIR}$(ls -S ${DESTDIR} | tail -n 1)
 TODAYDIR=${DESTDIR}nextcloud_${TODAY}
 EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 LOGFILE='/srv/nextcloud/backup.log'

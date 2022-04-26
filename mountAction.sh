@@ -12,6 +12,10 @@ fuction mountPartition(){
         if [ "$mountpoint" = "$expectedmp" ]; then
             # Mounted, check if it's in RO/RW mode mode
             echo 'Mounted as expected, check mount mode'
+            if [ ! -w $mountpoint ]; then    #Not writable, remount it as RW
+                echo "Not writable, remount it as RW"
+                sudo mount -o rw,remount $devpath $expectedmp
+            fi
         else
             # Mounted, but mountpointed is not expected
             echo "Start to umount from $devpath"
@@ -25,12 +29,12 @@ fuction mountPartition(){
     fi    
 }
 
-fuction umountPartition(){
+fuction mountToReadOnly(){
     uuid=$1
     devpath=$(lsblk -o UUID,PATH | awk -v u="$uuid" '$1 == u {print $2}')
     if [ ! $devpath ] then
-        echo "Start to umount from $devpath" | sudo umount $devpath
+        echo "Start to mount as readonly from $devpath" | sudo mount -o ro,remount $devpath
     else
-        echo "No device path found, no umount action"
+        echo "No devices found, no re-mount action performed"
     fi
 }

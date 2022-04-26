@@ -8,6 +8,8 @@
 #       2.3. Sync nextcloud directory with --link-dest and the dir value was get from step 2.2
 . mountAction.sh
 
+MOUNTUUID=0d5ae66f-c33f-4e18-8b4e-c9f80735e3b7
+MOUNTPOINT=/mnt/wdusb
 TODAY=$(date +%Y-%m-%d)
 SOURCEDIR=/www/wwwroot/nextcloud/
 DESTDIR=/mnt/wdusb/ncbackup/
@@ -17,6 +19,8 @@ EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 LOGFILE='/srv/nextcloud/backup.log'
 
 echo "---------Date:"$TODAY" start---------"  >> $LOGFILE
+# Mount partition with UUID to target mount point
+mountPartition $MOUNTUUID $MOUNTPOINT
 echo "LASTBACKUPDIR:"$LASTBACKUPDIR  >> $LOGFILE
 echo "TODAYDIR:"$TODAYDIR  >> $LOGFILE
 
@@ -29,6 +33,6 @@ else
     echo "--------Backup Mode: Delta backup" >> $LOGFILE
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST --link-dest=${LASTBACKUPDIR} $SOURCEDIR $TODAYDIR
 fi
-
+mountToReadOnly $MOUNTUUID
 echo "---------Execution done-----------" >> $LOGFILE
 echo "---------Date:"$TODAY" end ---------"  >> $LOGFILE

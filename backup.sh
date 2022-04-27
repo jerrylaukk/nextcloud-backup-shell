@@ -10,6 +10,9 @@
 
 MOUNTUUID=0d5ae66f-c33f-4e18-8b4e-c9f80735e3b7
 MOUNTPOINT=/mnt/wdusb
+# Mount partition with UUID to target mount point
+mountPartition $MOUNTUUID $MOUNTPOINT
+
 TODAY=$(date +%Y-%m-%d)
 SOURCEDIR=/www/wwwroot/nextcloud/
 DESTDIR=/mnt/wdusb/ncbackup/
@@ -17,10 +20,13 @@ LASTBACKUPDIR=${DESTDIR}$(ls -S ${DESTDIR} | tail -n 1)
 TODAYDIR=${DESTDIR}nextcloud_${TODAY}
 EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 LOGFILE='/srv/nextcloud/backup.log'
+if [ ! -d $DESTDIR ]; then
+    echo "----$DESTDIR does't not exist, now creating it"
+    sudo mkdir $DESTDIR
+    echo "----$DESTDIR creation done"
+fi
 
 echo "---------Date:"$TODAY" start---------"  >> $LOGFILE
-# Mount partition with UUID to target mount point
-mountPartition $MOUNTUUID $MOUNTPOINT
 echo "LASTBACKUPDIR:"$LASTBACKUPDIR  >> $LOGFILE
 echo "TODAYDIR:"$TODAYDIR  >> $LOGFILE
 

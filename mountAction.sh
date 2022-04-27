@@ -1,9 +1,9 @@
 #!/bin/bash
-fuction mountPartition(){
+function mountPartition(){
     #uuid=0d5ae66f-c33f-4e18-8b4e-c9f80735e3b7
     uuid=$1
     expectedmp=$2
-    echo "expectedmp:" $2
+    echo "Expected mount point:" $2
     mountpoint=$(lsblk -o UUID,MOUNTPOINT | awk -v u="$uuid" '$1 == u {print $2}')
     devpath=$(lsblk -o UUID,PATH | awk -v u="$uuid" '$1 == u {print $2}')
     echo 'mountpoint:' $mountpoint
@@ -29,11 +29,14 @@ fuction mountPartition(){
     fi    
 }
 
-fuction mountToReadOnly(){
+function mountToReadOnly(){
     uuid=$1
+    echo "----Mount to read-only, device uuid: $uuid"
     devpath=$(lsblk -o UUID,PATH | awk -v u="$uuid" '$1 == u {print $2}')
-    if [ ! $devpath ] then
-        echo "Start to mount as readonly from $devpath" | sudo mount -o ro,remount $devpath
+    echo "----Device path:$devpath"
+    if [ -n $devpath ]; then
+        echo "Mount $devpath to readonly "
+        sudo mount -o ro,remount $devpath
     else
         echo "No devices found, no re-mount action performed"
     fi

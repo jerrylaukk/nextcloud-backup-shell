@@ -6,7 +6,7 @@
 #       2.1. Sync all data to dest with name nexcloud_YYYY-MM-DD
 #       2.2. List dest directory with ls -t command, and get first one as the last backup name
 #       2.3. Sync nextcloud directory with --link-dest and the dir value was get from step 2.2
-. mountAction.sh
+. ./mountAction.sh
 
 MOUNTUUID=0d5ae66f-c33f-4e18-8b4e-c9f80735e3b7
 MOUNTPOINT=/mnt/wdusb

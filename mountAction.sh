@@ -35,9 +35,9 @@ function mountToReadOnly(){
     devpath=$(lsblk -o UUID,PATH | awk -v u="$uuid" '$1 == u {print $2}')
     echo "----Device path:$devpath"
     if [ -n $devpath ]; then
-        echo "Mount $devpath to readonly "
+        echo "----Mount $devpath to readonly "
         sudo mount -o ro,remount $devpath
     else
-        echo "No devices found, no re-mount action performed"
+        echo "----No devices found, no re-mount action performed"
     fi
 }

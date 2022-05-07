@@ -26,19 +26,19 @@ if [ ! -d $DESTDIR ]; then
     echo "----$DESTDIR creation done"
 fi
 
-echo "---------Date:"$TODAY" start---------"  >> $LOGFILE
-echo "LASTBACKUPDIR:"$LASTBACKUPDIR  >> $LOGFILE
-echo "TODAYDIR:"$TODAYDIR  >> $LOGFILE
+echo "---------Date:"$TODAY" start---------"  
+echo "LASTBACKUPDIR:"$LASTBACKUPDIR  
+echo "TODAYDIR:"$TODAYDIR  
 
 if [ ! $(ls -A ${DESTDIR} | tail -n -1) ]; then
 # if not exist, sync all
-    echo "--------Backup Mode: All backup" >> $LOGFILE
+    echo "--------Backup Mode: All backup" 
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST $SOURCEDIR $TODAYDIR
 else
 # if backup aleady exist, sync only for the increasment
-    echo "--------Backup Mode: Delta backup" >> $LOGFILE
+    echo "--------Backup Mode: Delta backup" 
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST --link-dest=${LASTBACKUPDIR} $SOURCEDIR $TODAYDIR
 fi
 mountToReadOnly $MOUNTUUID
-echo "---------Execution done-----------" >> $LOGFILE
-echo "---------Date:"$TODAY" end ---------"  >> $LOGFILE
+echo "---------Execution done-----------" 
+echo "---------Date:"$TODAY" end ---------"  

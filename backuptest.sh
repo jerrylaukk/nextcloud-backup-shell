@@ -21,7 +21,6 @@ MOUNTPOINT=/mnt/wdusb
 SOURCEDIR=/home/ubuntu/nas/data
 DESTDIR=/mnt/wdusb/backuptest4
 TODAY=$(date +%Y-%m-%d)
-LOGFILE='/home/ubuntu/nas/backup.log'
 EXCLUDELIST='/srv/nextcloud/rsync_exclude.list'
 
 mountPartition $MOUNTUUID $MOUNTPOINT
@@ -35,20 +34,20 @@ fi
 LASTBACKUPDIR=${DESTDIR}/$(ls -t ${DESTDIR} | head -n 1)
 TODAYDIR=${DESTDIR}/nexcloud_${TODAY}
 
-echo "---------Date:"$TODAY" start---------"  >> $LOGFILE
+echo "---------Date:"$TODAY" start---------" 
 
-echo "LASTBACKUPDIR:"$LASTBACKUPDIR  >> $LOGFILE
-echo "TODAYDIR:"$TODAYDIR  >> $LOGFILE
+echo "LASTBACKUPDIR:"$LASTBACKUPDIR 
+echo "TODAYDIR:"$TODAYDIR
 
 if [ ! $(ls -S ${DESTDIR} | tail -n -1) ]; then
 # if not exist, sync all
-    echo "----------Start to sync all data-----------" >> $LOGFILE
+    echo "----------Start to sync all data-----------" 
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST $SOURCEDIR $TODAYDIR
 else
 # if backup aleady exist, sync only for the increasment
-    echo "Delta backup" >> $LOGFILE
+    echo "Delta backup" 
     sudo rsync -avz --log-file=$LOGFILE --log-file-format='%t %f %b' --exclude-from=$EXCLUDELIST --link-dest=${LASTBACKUPDIR} $SOURCEDIR $TODAYDIR
 fi
 mountToReadOnly $MOUNTUUID
-echo "Execution done" >> $LOGFILE
+echo "Execution done" 
 
